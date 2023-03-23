@@ -116,9 +116,9 @@ async function _getReport(reportId) {
     // SELECT the report with id equal to reportId
     const { rows: [ report ] } = await client.query(`
       SELECT * FROM reports
-      WHERE id=$1;
+      WHERE id=${reportId};
 
-    `,[reportId]);
+    `);
     
 
     // return the report
@@ -166,10 +166,10 @@ async function closeReport(reportId, password) {
     await client.query(`
     UPDATE reports
     SET "isOpen"='false'
-    WHERE id=$1
+    WHERE id=${reportId}
 
 
-    `,[reportId])
+    `)
 
     // Return a message stating that the report has been closed
     return {
@@ -233,9 +233,9 @@ async function createReportComment(reportId, commentFields) {
     await client.query(`
     UPDATE reports
     SET "expirationDate" = CURRENT_TIMESTAMP + interval '1 day'
-    WHERE id=$1
+    WHERE id=${reportId}
     RETURNING *;
-  `, [reportId]);
+  `);
 
     // finally, return the comment
     
